@@ -1,3 +1,7 @@
+-- Script para criar tabela appointments
+-- Versão simplificada para funcionar com PostgreSQL
+
+-- Criar tabela appointments
 CREATE TABLE IF NOT EXISTS appointments (
     id SERIAL PRIMARY KEY,
     course_name TEXT NOT NULL,

@@ -1,7 +1,7 @@
 services:
   - type: web
     name: mastercrono
-    env: php
+    env: docker
     buildCommand: ""
     startCommand: ""
     envVars:
@@ -14,4 +14,6 @@ services:
       - key: DB_USER
         sync: false
       - key: DB_PASS
-        sync: false 
+        sync: false
+    healthCheckPath: /
+    autoDeploy: true 

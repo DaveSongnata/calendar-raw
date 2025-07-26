@@ -1,9 +1,12 @@
 FROM php:8.1-apache
 
-# Instalar extensão PostgreSQL
+# Instalar extensão PostgreSQL e cliente PostgreSQL
 RUN apt-get update && apt-get install -y \
     libpq-dev \
-    && docker-php-ext-install pdo pdo_pgsql
+    postgresql-client \
+    && docker-php-ext-install pdo pdo_pgsql \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Copiar arquivos da aplicação
 COPY . /var/www/html/
@@ -12,8 +15,15 @@ COPY . /var/www/html/
 RUN a2enmod rewrite
 RUN chown -R www-data:www-data /var/www/html
 
+# Tornar o script executável
+RUN chmod +x /var/www/html/init-db.sh
+
 # Expor porta 80
 EXPOSE 80
 
-# Comando para iniciar Apache
+# Script de inicialização
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["apache2-foreground"] 
